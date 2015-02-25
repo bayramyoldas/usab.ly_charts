@@ -32,7 +32,7 @@
 	</script>
 </head>
 <body>
-<div class="header"> HEADER</div>
+<div class="header">HEADER</div>
 <div class="container">
 	<div id="accordion_menu">
 		<ul>

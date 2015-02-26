@@ -15,7 +15,8 @@
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/font-awesome.css" rel="stylesheet">
 	<script href="js/prefixfree-1.0.7.js" type="text/javascript"></script>
-	<script src="js/jquery-1.7.1.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="http://www.sanwebe.com/wp-content/themes/sanwebe/js/jquery-1.10.2.min.js"></script>
+	
 	<script>
 	/*jQuery*/
 	$(document).ready(function(){
@@ -28,17 +29,26 @@
 				$(this).next().slideDown();
 			}
 		})
-	})
+	});
 	</script>
+
 </head>
 <body>
 <div class="header">HEADER</div>
 <div class="container">
+Elements:
+					 
 	<div id="accordion_menu">
 		<ul>
 			<li>
 				<h3><i class="fa fa-pie-chart"></i>Pie Chart</h3>
-				<div>Pie Chart Form</div>
+				<div>
+					<h4>Pie Chart Form</h4>
+					<dl class="input_fields_wrap">					    
+						<dl><input type="text" name="mytext[]"></dl>
+					</dl>
+					<a href="" class="add_field_button">Add More Fields</a>
+				</div>
 			</li>
 			<li>
 				<h3><i class="fa fa-pie-chart"></i></span>Column Chart</h3>
@@ -67,5 +77,25 @@
 		</ul>
 	</div>
 </div>
+	<script type="text/javascript">
+	$(document).ready(function() {
+	    var max_fields      = 10; //maximum input boxes allowed
+	    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+	    var add_button      = $(".add_field_button"); //Add button ID
+	    
+	    var x = 1; //initlal text box count
+	    $(add_button).click(function(e){ //on add input button click
+	        e.preventDefault();
+	        if(x < max_fields){ //max input box allowed
+	            x++; //text box increment
+	            $(wrapper).append('<dl><input type="text" name="mytext[]"/><a href="#" class="remove_field"><i style="margin-top: 8px;margin-left: 5px;" class="fa fa-minus-circle"></i></a></dl>'); //add input box
+	        }
+	    });
+	    
+	    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+	        e.preventDefault(); $(this).parent('dl').remove(); x--;
+	    })
+	});
+	</script>
 </body>
 </html>

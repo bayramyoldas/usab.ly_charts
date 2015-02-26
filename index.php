@@ -1,9 +1,12 @@
 <?php
 $work = 2;
-$data = array(
-			"Work" => "2",
-			"Sleep" => "8"
-	);
+$data = array( 
+             array('Date', 'Sales'),  
+             array('June 25', 12.25),  
+             array('June 26', 8.00), 
+             array('June 26', 8.00) 
+);
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -25,11 +28,10 @@ $data = array(
 	<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
 
 	<script type="text/javascript">      
-	var raw_data = <?php echo json_encode($data); ?>;
+	var data_array = <?=json_encode($data)?>;
 	google.setOnLoadCallback(drawChart);
       function drawChart() {
- var data = google.visualization.arrayToDataTable(raw_data);
-
+     var data = google.visualization.arrayToDataTable(data_array);
         var options = {
           title: 'My Daily Activities',
           //is3D: true

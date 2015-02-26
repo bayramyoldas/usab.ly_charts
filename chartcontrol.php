@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="tr" lang="tr" />
 <head>
-    <title>Administrator Panel</title>
+    <title>Add Chart</title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="content-style-type" content="text/css" />
 	<meta http-equiv="content-language" content="en" />
@@ -36,18 +36,21 @@
 <body>
 <div class="header">HEADER</div>
 <div class="container">
-Elements:
-					 
 	<div id="accordion_menu">
 		<ul>
 			<li>
 				<h3><i class="fa fa-pie-chart"></i>Pie Chart</h3>
 				<div>
 					<h4>Pie Chart Form</h4>
+					<h5>Add Chart Elements</h5>
+					<form method="post" action="chartprocess.php">
 					<dl class="input_fields_wrap">					    
-						<dl><input type="text" name="mytext[]"></dl>
+						<dl><input type="text" name="piechart_elements[]"><a href="" class="add_field_button"><i style="margin-top: 8px;margin-left: 5px;" class="fa fa-plus-circle"></i></a><br></dl>
 					</dl>
-					<a href="" class="add_field_button">Add More Fields</a>
+					
+					<input type="submit" value="Save" />
+					</form>
+					
 				</div>
 			</li>
 			<li>
@@ -88,7 +91,7 @@ Elements:
 	        e.preventDefault();
 	        if(x < max_fields){ //max input box allowed
 	            x++; //text box increment
-	            $(wrapper).append('<dl><input type="text" name="mytext[]"/><a href="#" class="remove_field"><i style="margin-top: 8px;margin-left: 5px;" class="fa fa-minus-circle"></i></a></dl>'); //add input box
+	            $(wrapper).append('<dl><input type="text" name="piechart_elements[]"/><a href="#" class="remove_field"><i style="margin-top: 8px;margin-left: 5px;" class="fa fa-minus-circle"></i></a></dl>'); //add input box
 	        }
 	    });
 	    

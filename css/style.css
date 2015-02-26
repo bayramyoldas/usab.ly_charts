@@ -2,7 +2,14 @@ body {
 	font-family: Trebuchet MS;
 	font-weight: 200;
 	font-size: 14px;
+	margin: 0;
+	background: #ececec;
 }
+
+h4, h5 {
+	margin: 5px auto;
+}
+
 
 input[type="text"], input[type="password"], textarea
 {
@@ -81,10 +88,8 @@ input[type="submit"]:hover, input[type="button"]:hover
 }
 
 .container {
-	background: #ececec;
 	margin-left: auto;
 	margin-right: auto;
-	width: 960px;
 	padding: 20px 0;
 }
 
@@ -100,9 +105,9 @@ input[type="submit"]:hover, input[type="button"]:hover
 	width: 960px;
 	margin: 50px auto 0 auto;
 	color: black;
-	box-shadow: 
+	/*box-shadow: 
 		0 5px 15px 1px rgba(0, 0, 0, 0.6), 
-		0 0 200px 1px rgba(255, 255, 255, 0.5);
+		0 0 200px 1px rgba(255, 255, 255, 0.5);*/
 }
 #accordion_menu h3 {
 	font-size: 14px;
@@ -110,11 +115,13 @@ input[type="submit"]:hover, input[type="button"]:hover
 	margin: 0;
 	padding: 0 10px;
 	cursor: pointer;
-	background: #6C6C6C; 
-	background: linear-gradient(#FFFFFF, #E2E2E2);
+	box-shadow: 0px 0px 1px 1px #E2E2E2;
+	transition: all 0.25s;
 }
 #accordion_menu h3:hover {
 	text-shadow: 0 0 1px rgba(255, 255, 255, 0.7);
+	background: #F7F7F7;
+	
 }
 #accordion_menu h3 span {
 	font-size: 16px;

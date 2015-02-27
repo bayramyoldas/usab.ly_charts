@@ -70,8 +70,10 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
     var piechart_title = <?=json_encode($piechart_title)?>;
     google.setOnLoadCallback(drawChart);
     function drawChart() {
-      var data = google.visualization.arrayToDataTable(data_array);
-      var options = {
+      var data = new Array(row_count-1);
+      var options = new Array(row_count-1);
+      data[row_count] = google.visualization.arrayToDataTable(data_array);
+      options[row_count] = {
                       title: piechart_title,
                       //is3D: true
                       backgroundColor: 'none',
@@ -80,7 +82,7 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
       var div_id = "piechart" + row_count;
       var chart = new google.visualization.PieChart(document.getElementById(div_id));
       window.alert(div_id);
-      chart.draw(data, options);
+      chart.draw(data[row_count], options[row_count]);
     }
   </script>
 <?php   

@@ -35,7 +35,13 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
                        [2] => Array ( [0] => deneme3 [1] => 22 ) 
                        [3] => Array ( [0] => deneme4 [1] => 67 ) ) ) 
 
+Array ( [label] => 12:00 [y] => 50 ) 
+Array ( [label] => 14:00 [y] => 20 ) 
+Array ( [label] => 16:00 [y] => 15 ) 
+Array ( [label] => 18:00 [y] => 45 )
+Array ( [label] => 20:00 [y] => 80 )
 
+Array ( [label] => deneme1 [y] => 21 ) Array ( [label] => deneme2 [y] => 24 ) Array ( [label] => deneme3 [y] => 22 ) Array ( [label] => deneme4 [y] => 67 ) Array ( [label] => deneme5 [y] => 85 ) Array ( [label] => Ist [y] => 1700 ) Array ( [label] => Mal [y] => 100 ) Array ( [label] => Tok [y] => 70 ) Array ( [label] => Ank [y] => 400 ) Array ( [label] => [y] => 0 ) Array ( [label] => Ist [y] => 1700 ) Array ( [label] => Mal [y] => 100 ) Array ( [label] => Tok [y] => 200 ) Array ( [label] => Ank [y] => 450 ) Array ( [label] => [y] => 0 ) Array ( [label] => 12:00 [y] => 50 ) Array ( [label] => 14:00 [y] => 20 ) Array ( [label] => 16:00 [y] => 15 ) Array ( [label] => 18:00 [y] => 45 ) Array ( [label] => 20:00 [y] => 80 ) Array ( [label] => deneme1 [y] => 213 ) Array ( [label] => asas [y] => 124 ) Array ( [label] => [y] => 0 )
 
 */
   try {
@@ -54,15 +60,15 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
       $element_name                    = explode(", ", $row['element_name']);
       $element_value                   = explode(", ", $row['element_value']);
       $piechart_title[$row_count]      = $row['chart_title'];
-      $data_points = array();
+      $point = array();
       for ($i=0; $i < count($element_value) ; $i++) 
       { 
           $piechart_data[$row_count][$i][0] = $element_name[$i];
           $piechart_data[$row_count][$i][1] = floatval($element_value[$i]);
-          $point = array("label" => $piechart_data[$row_count][$i][0] , "y" => $piechart_data[$row_count][$i][1]);
-          array_push($data_points, $point);      
+          $point = array("label" => $piechart_data[$row_count][$i][0] , "y" => $piechart_data[$row_count][$i][1]);    
+          echo json_encode($point, JSON_NUMERIC_CHECK);
       }
-   
+
       $row_count++;
     }
     $row_count = $stmt->rowCount();
@@ -77,7 +83,7 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
 <script type="text/javascript">
   var piechart_title = <?=json_encode($piechart_title)?>; 
   var row_count = <?=json_encode($row_count)?>;
-  var data_array = <?=json_encode($data_points)?>; 
+  var data_array = <?=json_encode($point, JSON_NUMERIC_CHECK)?>; 
   var element_count = <?=json_encode($element_count)?>; 
   window.onload = function () {
     for (var i = 1; i <= row_count; i++) {
@@ -190,7 +196,7 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
 <div class="mainbody">
 
 <?php for ($j=1; $j <= $row_count; $j++) { ?>
-  <div id="chartContainer<?php echo $j; ?>" style="height: 300px;"></div>
+  <div id="chartContainer<?php echo $j; ?>" style="height: 300px;width:480px;float: left"></div>
 <?php }  ?>
 
  

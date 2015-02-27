@@ -19,6 +19,7 @@ include ("config/db.php");
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="css/style.css" rel="stylesheet">
   <link href="css/font-awesome.css" rel="stylesheet">
+
   <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
 
 <?php
@@ -33,6 +34,9 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
                        [1] => Array ( [0] => deneme2 [1] => 24 ) 
                        [2] => Array ( [0] => deneme3 [1] => 22 ) 
                        [3] => Array ( [0] => deneme4 [1] => 67 ) ) ) 
+
+
+
 */
   try {
     $conn = new PDO (DSN, DB_USER, DB_PASS);
@@ -42,56 +46,99 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
    // $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
-    $row_count = 0;
+    $row_count = 1;
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) 
     {
-      $row_count++;
-      $piechart_data = array();
-      $element_name = explode(", ", $row['element_name']);
-      $element_value = explode(", ", $row['element_value']);
-      $piechart_title = $row['chart_title'];
-
+      
+      $piechart_data                   = array();
+      $element_name                    = explode(", ", $row['element_name']);
+      $element_value                   = explode(", ", $row['element_value']);
+      $piechart_title[$row_count]      = $row['chart_title'];
       for ($i=0; $i < count($element_value) ; $i++) 
       { 
-          $piechart_data[$row_count][0][0] = $row['element_title'];
-          $piechart_data[$row_count][0][1] = $row['value_title'];
           $piechart_data[$row_count][$i][0] = $element_name[$i];
           $piechart_data[$row_count][$i][1] = floatval($element_value[$i]);
-       }
-     
-?>
-  <script type="text/javascript">      
-    var data_array = <?=json_encode($piechart_data[$row_count])?>;
-    var row_count = <?=json_encode($row_count)?>;
-    var piechart_title = <?=json_encode($piechart_title)?>;
-    google.setOnLoadCallback(drawChart);
-    function drawChart() {
-      var data = new Array(row_count-1);
-      var options = new Array(row_count-1);
-      data[row_count] = google.visualization.arrayToDataTable(data_array);
-      options[row_count] = {
-                      title: piechart_title,
-                      //is3D: true
-                      backgroundColor: 'none',
-                      chartArea:{left:20,top:20,width:'50%',height:'75%'}
-                  };
-      var div_id = "piechart" + row_count;
-      var chart = new google.visualization.PieChart(document.getElementById(div_id));
-      window.alert(div_id);
-      chart.draw(data[row_count], options[row_count]);
+      }
+      $row_count++;
+      print_r($piechart_data);
     }
-  </script>
-<?php   
-    }
-
+    $row_count = $stmt->rowCount();
   } catch (PDOException $e) 
     {
       echo 'ERROR: ' . $e->getMessage();
     }
-
 ?>
 
+<script type="text/javascript">
+  var piechart_title = <?=json_encode($piechart_title)?>; 
+  var row_count = <?=json_encode($row_count)?>;
+  var data_array = <?=json_encode($piechart_data)?>; 
+  window.onload = function () {
+    for (var i = 1; i <= row_count; i++) {
+    var chartContainer = "chartContainer" + i;
+    var chart_canvas = "chart" + i;
+    var chart_canvas = new CanvasJS.Chart(chartContainer, {
+      title:{
+        text: piechart_title[i]             
+      },
+      data: [//array of dataSeries              
+        { //dataSeries object
 
+         /*** Change type "column" to "bar", "area", "line" or "pie"***/
+         type: "pie",
+         dataPoints: [
+         { label: data_array[1][0][0], y: data_array[1][0][1] },
+         { label: data_array[1][1][0], y: data_array[1][1][1] },
+         { label: data_array[1][2][0], y: data_array[1][2][1] },       
+         { label: data_array[1][3][0], y: data_array[1][3][1] }                            
+         ]
+       }
+       ]
+     });
+       chart_canvas.render();
+    };
+ }
+</script>
+  <script type="text/javascript" src="js/canvasjs.js"></script>
+
+
+
+
+<!-- OLD
+  <script type="text/javascript">    
+    var row_count = <?=json_encode($row_count)?>;  
+
+    var data_array = new Array(row_count-1);
+    var piechart_title = new Array(row_count-1);
+
+    var data = new Array(row_count-1);
+    var options = new Array(row_count-1);
+
+    for (var i = 1; i < row_count; i++) 
+    {
+      data_array[i] = <?=json_encode($piechart_data[$i])?>;   
+      piechart_title[i] = <?=json_encode($piechart_title[$i])?>;
+
+    };
+
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        for (var i = 1; i <= row_count; i++) {
+        data[i] = google.visualization.arrayToDataTable(data_array[i]);
+        options[i] = {
+                        title: piechart_title[i],
+                        is3D: true,
+                        backgroundColor: 'none',
+                        chartArea:{left:20,top:20,width:'50%',height:'75%'}
+                    };
+        var div_id = "piechart" + i;
+        var chart = new google.visualization.PieChart(document.getElementById(div_id));
+        window.alert(div_id);
+        chart.draw(data[i], options[i]);
+      };
+     }
+   
+  </script>
 
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
@@ -125,18 +172,21 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
     chart.draw(view, options);
   }
 </script>
+
+-->
+
 </head>
 
 <body>
 <div class="header">HEADER</div>
 <div class="container">
 <div class="mainbody">
-       
-<?php for ($i=1; $i <=$row_count ; $i++) { ?>
-  <div id="piechart<?php echo $i; ?>" style=""></div>
+
+<?php for ($j=1; $j <= $row_count; $j++) { ?>
+  <div id="chartContainer<?php echo $j; ?>" style="height: 300px;"></div>
 <?php }  ?>
 
-<div id="columnchart_values" style=" "></div>
+ 
 
 </div>
 

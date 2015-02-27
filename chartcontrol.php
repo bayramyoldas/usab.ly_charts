@@ -46,8 +46,6 @@
 					<form method="post" action="chartprocess.php">
 					<dl class="input_fields_wrap">			
 						<input class="input_title" type="text" name="piechart_title" placeholder="Chart Tittle" style="width: 342px;" required /><br>		    
-						<input class="input_title" type="text" name="piechart_element_title" placeholder="Element Tittle" required />
-						<input class="input_title" type="text" name="piechart_value_title" placeholder="Value Tittle" required /><br>
 						<input type="text" name="piechart_elements[]" placeholder="Element Name" required />
 						<input type="text" name="piechart_element_values[]" placeholder="Element Value" required />
 						<a href="" class="add_field_button"><i style="margin-top: 8px;" class="fa fa-plus-circle"></i></a><br>

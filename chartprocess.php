@@ -1,13 +1,11 @@
 <?php
 include ("config/db.php");
 
-if(isset($_POST["piechart_elements"]) && isset($_POST["piechart_element_values"]) && isset($_POST["piechart_element_title"]) && isset($_POST["piechart_value_title"])){
+if(isset($_POST["piechart_elements"]) && isset($_POST["piechart_element_values"]) && isset($_POST["piechart_title"])){
     
     $piechart_elements ="";
     $piechart_values ="";
     $piechart_title = $_POST["piechart_title"];
-    $piechart_element_title = $_POST["piechart_element_title"];
-    $piechart_value_title 	= $_POST["piechart_value_title"];
     foreach($_POST["piechart_elements"] as $key => $text_field){
         $piechart_elements .= $text_field .", ";
     }
@@ -24,11 +22,9 @@ $id = 1;
 try {
 	$conn = new PDO (DSN, DB_USER, DB_PASS);
 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	 $stmt = $conn->prepare('INSERT INTO piechart (chart_title, element_title, value_title, element_name, element_value) VALUES(:chart_title, :element_title, :value_title, :element_name, :element_value)');
+	 $stmt = $conn->prepare('INSERT INTO piechart (chart_title, element_name, element_value) VALUES(:chart_title, :element_name, :element_value)');
 	  $stmt->execute(array(
 	  	':chart_title' => 	$piechart_title,
-	    ':element_title' => $piechart_element_title,
-	    ':value_title'	 => $piechart_value_title,
 	    ':element_name'	 => $piechart_elements,
 	    ':element_value' => $piechart_values
 	  ));
@@ -40,11 +36,6 @@ try {
 	$stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
 	$stmt->execute();
-	while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		echo $row[element_title] . '<br';
-		echo $row[element_value];
-	}
-
 } catch (PDOException $e) {
 	echo 'ERROR: ' . $e->getMessage();
 }

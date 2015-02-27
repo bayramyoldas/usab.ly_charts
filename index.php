@@ -1,11 +1,40 @@
 <?php
-$work = 2;
-$data = array( 
-             array('Date', 'Sales'),  
-             array('June 25', 12.25),  
-             array('June 26', 8.00), 
-             array('June 26', 8.00) 
-);
+include ("config/db.php");
+
+$id = 1;
+try {
+  $conn = new PDO (DSN, DB_USER, DB_PASS);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  
+  $stmt = $conn->prepare('SELECT * FROM piechart');
+ // $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+  $stmt->execute();
+  $row_count = 0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $row_count++;
+    $piechart_data.$row_count = array();
+    $element_name = explode(", ", $row['element_name']);
+    $element_value = explode(", ", $row['element_value']);
+ /*Array ([0] => Array ( [0] => Time  [1] => Activity ) 
+          [1] => Array ( [0] => 14:00 [1] => 20 ) 
+          [2] => Array ( [0] => 16:00 [1] => 15 ) 
+          [3] => Array ( [0] => 18:00 [1] => 45 ) 
+          [4] => Array ( [0] => 20:00 [1] => 80 ) ) 
+    
+ */  
+    for ($i=1; $i < count($element_value) ; $i++) { 
+        $piechart_data.$row_count[0][0] = $row['element_title'];
+        $piechart_data.$row_count[0][1] = $row['value_title'];
+        $piechart_data.$row_count[$i][0] = $element_name[$i];
+        $piechart_data.$row_count[$i][1] = floatval($element_value[$i]);
+       }
+
+  }
+
+} catch (PDOException $e) {
+  echo 'ERROR: ' . $e->getMessage();
+  }
 
 ?>
 
@@ -28,7 +57,7 @@ $data = array(
 	<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
 
 	<script type="text/javascript">      
-	var data_array = <?=json_encode($data)?>;
+	var data_array = <?=json_encode($piechart_data)?>;
 	google.setOnLoadCallback(drawChart);
       function drawChart() {
      var data = google.visualization.arrayToDataTable(data_array);
@@ -82,7 +111,7 @@ $data = array(
 <body>
 <div class="header">HEADER</div>
 <div class="container">
-<div>
+<div class="mainbody">
        <div id="piechart" style=""></div>
 <div id="columnchart_values" style=" "></div>
 

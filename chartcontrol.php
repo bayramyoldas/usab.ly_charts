@@ -45,11 +45,11 @@
 					<h5>Add Chart Elements</h5>
 					<form method="post" action="chartprocess.php">
 					<dl class="input_fields_wrap">					    
-						<input type="text" name="piechart_element_column1" placeholder="Element Tittle">
-						<input type="text" name="piechart_element_column2" placeholder="Value Tittle"><br>
-						<input type="text" name="piechart_elements[]" placeholder="Element Name" />
-						<input type="text" name="piechart_element_values[]" placeholder="Element Value">
-						<a href="" class="add_field_button"><i style="margin-top: 8px;margin-left: 5px;" class="fa fa-plus-circle"></i></a><br>
+						<input class="input_title" type="text" name="piechart_element_title" placeholder="Element Tittle" required />
+						<input class="input_title" type="text" name="piechart_value_title" placeholder="Value Tittle" required /><br>
+						<input type="text" name="piechart_elements[]" placeholder="Element Name" required />
+						<input type="text" name="piechart_element_values[]" placeholder="Element Value" required />
+						<a href="" class="add_field_button"><i style="margin-top: 8px;" class="fa fa-plus-circle"></i></a><br>
 					</dl>
 
 					<input type="submit" value="Save" />
@@ -95,16 +95,7 @@
 	        e.preventDefault();
 	        if(x < max_fields){ //max input box allowed
 	            x++; //text box increment
-	            $(wrapper).append('<dl>
-		            <input type="text" name="piechart_elements[]" placeholder="Element Name" />
-		            <input type="text" name="piechart_element_values[]" placeholder="Element Value" />
-		            <a href="#" class="remove_field"><i style="margin-top: 8px;margin-left: 5px;" class="fa fa-minus-circle"></i></a>
-	            </dl>'); //add input box
-
-	             $(wrapper).append('<dl>
-		             <input type="text" name="piechart_elements[]"/>
-		             <a href="#" class="remove_field"><i style="margin-top: 8px;margin-left: 5px;" class="fa fa-minus-circle"></i></a>
-	             </dl>'); //add input box
+	            $(wrapper).append('<dl><input type="text" name="piechart_elements[]" placeholder="Element Name" required /> <input type="text" name="piechart_element_values[]" placeholder="Element Value" required /><a href="#" class="remove_field"><i style="margin-top: 8px;margin-left: 5px;" class="fa fa-minus-circle"></i></a></dl>'); //add input box
 	        }
 	    });
 	    

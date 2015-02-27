@@ -44,7 +44,8 @@
 					<h4>Pie Chart Form</h4>
 					<h5>Add Chart Elements</h5>
 					<form method="post" action="chartprocess.php">
-					<dl class="input_fields_wrap">					    
+					<dl class="input_fields_wrap">			
+						<input class="input_title" type="text" name="piechart_title" placeholder="Chart Tittle" style="width: 342px;" required /><br>		    
 						<input class="input_title" type="text" name="piechart_element_title" placeholder="Element Tittle" required />
 						<input class="input_title" type="text" name="piechart_value_title" placeholder="Value Tittle" required /><br>
 						<input type="text" name="piechart_elements[]" placeholder="Element Name" required />

@@ -20,11 +20,10 @@ include ("config/db.php");
   <link href="css/style.css" rel="stylesheet">
   <link href="css/font-awesome.css" rel="stylesheet">
   <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
-
- <script type="text/javascript">
+  <script type="text/javascript">
     google.load("visualization", "1", {packages:["corechart"]});
     google.setOnLoadCallback(drawChart);
-   function drawChart() {
+    function drawChart() {
       var data = google.visualization.arrayToDataTable([
         ['Year', 'Visitations', { role: 'style' } ],
         ['2010', 10, 'color: gray'],
@@ -33,7 +32,6 @@ include ("config/db.php");
         ['2040', 22, 'stroke-color: #703593; stroke-width: 4; fill-color: #C5A5CF'],
         ['2040', 28, 'stroke-color: #871B47; stroke-opacity: 0.6; stroke-width: 8; fill-color: #BC5679; fill-opacity: 0.2']
       ]);
-
       var view = new google.visualization.DataView(data);
       view.setColumns([0, 1,
                        { calc: "stringify",
@@ -53,77 +51,72 @@ include ("config/db.php");
       var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
       chart.draw(view, options);
   }
-  </script>
+</script>
 
 
 <?php
-$id = 1;
-try {
-  $conn = new PDO (DSN, DB_USER, DB_PASS);
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  
-  $stmt = $conn->prepare('SELECT * FROM piechart');
- // $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-  $stmt->execute();
-  $row_count = 0;
-  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $row_count++;
-    $piechart_data[$row_count] = array();
-    $element_name = explode(", ", $row['element_name']);
-    $element_value = explode(", ", $row['element_value']);
- /*Array ([0] => Array ( [0] => Time  [1] => Activity ) 
-          [1] => Array ( [0] => 14:00 [1] => 20 ) 
-          [2] => Array ( [0] => 16:00 [1] => 15 ) 
-          [3] => Array ( [0] => 18:00 [1] => 45 ) 
-          [4] => Array ( [0] => 20:00 [1] => 80 ) ) 
+$row_count = 0;
+for($i = 1; $i <= count($element_value); $i++)  
+{
     
- */  
-    for ($i=1; $i < count($element_value) ; $i++) { 
-        $piechart_data[$row_count][0][0] = $row['element_title'];
-        $piechart_data[$row_count][0][1] = $row['value_title'];
-        $piechart_data[$row_count][$i][0] = $element_name[$i];
-        $piechart_data[$row_count][$i][1] = floatval($element_value[$i]);
+}
+
+  $id = 1;
+  try {
+    $conn = new PDO (DSN, DB_USER, DB_PASS);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $stmt = $conn->prepare('SELECT * FROM piechart where id = :id');
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) 
+    {
+      $piechart_data = array();
+      $element_name = explode(", ", $row['element_name']);
+      $element_value = explode(", ", $row['element_value']);
+      $piechart_title = $row['chart_title'];
+
+      for ($i=1; $i < count($element_value) ; $i++) 
+      { 
+          $piechart_data[0][0] = $row['element_title'];
+          $piechart_data[0][1] = $row['value_title'];
+          $piechart_data[$i][0] = $element_name[$i];
+          $piechart_data[$i][1] = floatval($element_value[$i]);
        }
-       ?>
+         print_r($piechart_data);
+    }
 
-      <script type="text/javascript">      
-      var data_array = <?=json_encode($piechart_data[$row_count])?>;
-      google.setOnLoadCallback(drawChart);
-          function drawChart() {
-         var data = google.visualization.arrayToDataTable(data_array);
-            var options = {
-              title: $row['element_title'],
-              //is3D: true
-              backgroundColor: 'none',
-              chartArea:{left:20,top:20,width:'50%',height:'75%'}
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-            chart.draw(data, options);
-        }
-      </script>
-  <?php
-  }
-
-} catch (PDOException $e) {
-  echo 'ERROR: ' . $e->getMessage();
-  }
+  } catch (PDOException $e) 
+    {
+      echo 'ERROR: ' . $e->getMessage();
+    }
 
 ?>
-
-
-
-  
+  <script type="text/javascript">      
+    var data_array = <?=json_encode($piechart_data)?>;
+    var piechart_title = <?=json_encode($piechart_title)?>;
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable(data_array);
+      var options = {
+                      title: piechart_title,
+                      //is3D: true
+                      backgroundColor: 'none',
+                      chartArea:{left:20,top:20,width:'50%',height:'75%'}
+                  };
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+      chart.draw(data, options);
+    }
+  </script>
 </head>
-
 
 <body>
 <div class="header">HEADER</div>
 <div class="container">
 <div class="mainbody">
        <div id="piechart" style=""></div>
+       <div id="<?php $piechart[2] ?>" style=""></div>
 <div id="columnchart_values" style=" "></div>
 
 </div>

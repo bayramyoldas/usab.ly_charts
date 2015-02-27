@@ -36,6 +36,10 @@
 <body>
 <div class="header"></div>
 <div class="container">
+<div class="navigator">
+  <a href="index.php">Home Page</a>
+
+</div>
 	<div id="accordion_menu">
 		<ul>
 			<li>

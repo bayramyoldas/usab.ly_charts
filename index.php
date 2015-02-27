@@ -61,7 +61,6 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
           $piechart_data[$row_count][$i][1] = floatval($element_value[$i]);
           $point = array("label" => $piechart_data[$row_count][$i][0] , "y" => $piechart_data[$row_count][$i][1]);
           array_push($data_points, $point);      
-          print_r($point);
       }
    
       $row_count++;
@@ -184,6 +183,10 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
 <body>
 <div class="header"></div>
 <div class="container">
+<div class="navigator">
+  <a href="chartcontrol.php">Chart Control</a>
+
+</div>
 <div class="mainbody">
 
 <?php for ($j=1; $j <= $row_count; $j++) { ?>

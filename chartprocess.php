@@ -30,7 +30,7 @@ try {
 	  ));
 	 
 	  # Affected Rows?
-	  header("Location: chartcontrol.php")
+	  header("Location: index.php");
 
 } catch (PDOException $e) {
 	echo 'ERROR: ' . $e->getMessage();

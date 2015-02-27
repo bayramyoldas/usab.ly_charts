@@ -21,8 +21,6 @@ include ("config/db.php");
   <link href="css/font-awesome.css" rel="stylesheet">
   <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
 
-
-
 <?php
 /*
 Array ( [1] => Array ( [0] => Array ( [0] => Time [1] => Activity ) 
@@ -36,8 +34,6 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
                        [2] => Array ( [0] => deneme3 [1] => 22 ) 
                        [3] => Array ( [0] => deneme4 [1] => 67 ) ) ) 
 */
-
-  $id = 1;
   try {
     $conn = new PDO (DSN, DB_USER, DB_PASS);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

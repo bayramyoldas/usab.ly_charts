@@ -1,77 +1,25 @@
 <?php
 include ("config/db.php");
-
-$id = 1;
-try {
-  $conn = new PDO (DSN, DB_USER, DB_PASS);
-  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  
-  $stmt = $conn->prepare('SELECT * FROM piechart');
- // $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-
-  $stmt->execute();
-  $row_count = 0;
-  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $row_count++;
-    $piechart_data.$row_count = array();
-    $element_name = explode(", ", $row['element_name']);
-    $element_value = explode(", ", $row['element_value']);
- /*Array ([0] => Array ( [0] => Time  [1] => Activity ) 
-          [1] => Array ( [0] => 14:00 [1] => 20 ) 
-          [2] => Array ( [0] => 16:00 [1] => 15 ) 
-          [3] => Array ( [0] => 18:00 [1] => 45 ) 
-          [4] => Array ( [0] => 20:00 [1] => 80 ) ) 
-    
- */  
-    for ($i=1; $i < count($element_value) ; $i++) { 
-        $piechart_data.$row_count[0][0] = $row['element_title'];
-        $piechart_data.$row_count[0][1] = $row['value_title'];
-        $piechart_data.$row_count[$i][0] = $element_name[$i];
-        $piechart_data.$row_count[$i][1] = floatval($element_value[$i]);
-       }
-
-  }
-
-} catch (PDOException $e) {
-  echo 'ERROR: ' . $e->getMessage();
-  }
-
 ?>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="tr" lang="tr" />
 <head>
     <title>Charts</title>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="content-style-type" content="text/css" />
-	<meta http-equiv="content-language" content="en" />
-	<meta http-equiv="imagetoolbar" content="no" />
-	<meta name="resource-type" content="media" />
-	<meta name="distribution" content="global" />
-	<meta name="copyright" content="2014 Bayram Yoldas" />
-	<meta name="keywords" content="image, fan art, draw, game, anime, manga" />
-	<meta name="description" content="" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link href="css/style.css" rel="stylesheet">
-	<link href="css/font-awesome.css" rel="stylesheet">
-	<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
-
-	<script type="text/javascript">      
-	var data_array = <?=json_encode($piechart_data)?>;
-	google.setOnLoadCallback(drawChart);
-      function drawChart() {
-     var data = google.visualization.arrayToDataTable(data_array);
-        var options = {
-          title: 'My Daily Activities',
-          //is3D: true
-          backgroundColor: 'none',
-          chartArea:{left:20,top:20,width:'50%',height:'75%'}
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
-      }</script>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="content-style-type" content="text/css" />
+  <meta http-equiv="content-language" content="en" />
+  <meta http-equiv="imagetoolbar" content="no" />
+  <meta name="resource-type" content="media" />
+  <meta name="distribution" content="global" />
+  <meta name="copyright" content="2014 Bayram Yoldas" />
+  <meta name="keywords" content="image, fan art, draw, game, anime, manga" />
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/font-awesome.css" rel="stylesheet">
+  <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
 
  <script type="text/javascript">
     google.load("visualization", "1", {packages:["corechart"]});
@@ -107,7 +55,70 @@ try {
   }
   </script>
 
+
+<?php
+$id = 1;
+try {
+  $conn = new PDO (DSN, DB_USER, DB_PASS);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  
+  $stmt = $conn->prepare('SELECT * FROM piechart');
+ // $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+  $stmt->execute();
+  $row_count = 0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $row_count++;
+    $piechart_data[$row_count] = array();
+    $element_name = explode(", ", $row['element_name']);
+    $element_value = explode(", ", $row['element_value']);
+ /*Array ([0] => Array ( [0] => Time  [1] => Activity ) 
+          [1] => Array ( [0] => 14:00 [1] => 20 ) 
+          [2] => Array ( [0] => 16:00 [1] => 15 ) 
+          [3] => Array ( [0] => 18:00 [1] => 45 ) 
+          [4] => Array ( [0] => 20:00 [1] => 80 ) ) 
+    
+ */  
+    for ($i=1; $i < count($element_value) ; $i++) { 
+        $piechart_data[$row_count][0][0] = $row['element_title'];
+        $piechart_data[$row_count][0][1] = $row['value_title'];
+        $piechart_data[$row_count][$i][0] = $element_name[$i];
+        $piechart_data[$row_count][$i][1] = floatval($element_value[$i]);
+       }
+       ?>
+
+      <script type="text/javascript">      
+      var data_array = <?=json_encode($piechart_data[$row_count])?>;
+      google.setOnLoadCallback(drawChart);
+          function drawChart() {
+         var data = google.visualization.arrayToDataTable(data_array);
+            var options = {
+              title: $row['element_title'],
+              //is3D: true
+              backgroundColor: 'none',
+              chartArea:{left:20,top:20,width:'50%',height:'75%'}
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
+      </script>
+  <?php
+  }
+
+} catch (PDOException $e) {
+  echo 'ERROR: ' . $e->getMessage();
+  }
+
+?>
+
+
+
+  
 </head>
+
+
 <body>
 <div class="header">HEADER</div>
 <div class="container">

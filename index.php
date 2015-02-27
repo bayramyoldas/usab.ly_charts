@@ -24,7 +24,6 @@ include ("config/db.php");
 
 
 <?php
-
 /*
 Array ( [1] => Array ( [0] => Array ( [0] => Time [1] => Activity ) 
                        [1] => Array ( [0] => 14:00 [1] => 20 ) 
@@ -36,8 +35,6 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
                        [1] => Array ( [0] => deneme2 [1] => 24 ) 
                        [2] => Array ( [0] => deneme3 [1] => 22 ) 
                        [3] => Array ( [0] => deneme4 [1] => 67 ) ) ) 
-
-
 */
 
   $id = 1;
@@ -58,14 +55,14 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
       $element_value = explode(", ", $row['element_value']);
       $piechart_title = $row['chart_title'];
 
-      for ($i=1; $i < count($element_value) ; $i++) 
+      for ($i=0; $i < count($element_value) ; $i++) 
       { 
           $piechart_data[$row_count][0][0] = $row['element_title'];
           $piechart_data[$row_count][0][1] = $row['value_title'];
           $piechart_data[$row_count][$i][0] = $element_name[$i];
           $piechart_data[$row_count][$i][1] = floatval($element_value[$i]);
        }
-      print_r($piechart_data);
+     
 ?>
   <script type="text/javascript">      
     var data_array = <?=json_encode($piechart_data[$row_count])?>;
@@ -80,8 +77,9 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
                       backgroundColor: 'none',
                       chartArea:{left:20,top:20,width:'50%',height:'75%'}
                   };
-      var chart = new google.visualization.PieChart(document.getElementById('piechart'.concat(row_count)));
-      window.alert('piechart'.concat(row_count));
+      var div_id = "piechart" + row_count;
+      var chart = new google.visualization.PieChart(document.getElementById(div_id));
+      window.alert(div_id);
       chart.draw(data, options);
     }
   </script>
@@ -135,8 +133,11 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
 <div class="header">HEADER</div>
 <div class="container">
 <div class="mainbody">
-       <div id="piechart1" style=""></div>
-       <div id="piechart2" style=""></div>
+       
+<?php for ($i=1; $i <=$row_count ; $i++) { ?>
+  <div id="piechart<?php echo $i; ?>" style=""></div>
+<?php }  ?>
+
 <div id="columnchart_values" style=" "></div>
 
 </div>

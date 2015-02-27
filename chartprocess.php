@@ -30,12 +30,8 @@ try {
 	  ));
 	 
 	  # Affected Rows?
-	  echo $stmt->rowCount(); // 1
+	  header("Location: chartcontrol.php")
 
-	$stmt = $conn->prepare('SELECT * FROM piechart WHERE id = :id');
-	$stmt->bindParam(':id', $id, PDO::PARAM_INT);
-
-	$stmt->execute();
 } catch (PDOException $e) {
 	echo 'ERROR: ' . $e->getMessage();
 }

@@ -34,7 +34,7 @@
 
 </head>
 <body>
-<div class="header">HEADER</div>
+<div class="header"></div>
 <div class="container">
 	<div id="accordion_menu">
 		<ul>
@@ -57,7 +57,7 @@
 				</div>
 			</li>
 			<li>
-				<h3><i class="fa fa-pie-chart"></i></span>Column Chart</h3>
+				<h3><i class="fa fa-bar-chart"></i></span>Column Chart</h3>
 				<div>Column Chart Form</div>
 			</li>
 			<li>

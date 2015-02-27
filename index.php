@@ -54,48 +54,52 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
       $element_name                    = explode(", ", $row['element_name']);
       $element_value                   = explode(", ", $row['element_value']);
       $piechart_title[$row_count]      = $row['chart_title'];
+      $data_points = array();
       for ($i=0; $i < count($element_value) ; $i++) 
       { 
           $piechart_data[$row_count][$i][0] = $element_name[$i];
           $piechart_data[$row_count][$i][1] = floatval($element_value[$i]);
+          $point = array("label" => $piechart_data[$row_count][$i][0] , "y" => $piechart_data[$row_count][$i][1]);
+          array_push($data_points, $point);      
+          print_r($point);
       }
+   
       $row_count++;
-      print_r($piechart_data);
     }
     $row_count = $stmt->rowCount();
+    $element_count = count($element_name );
   } catch (PDOException $e) 
     {
       echo 'ERROR: ' . $e->getMessage();
     }
 ?>
 
+
 <script type="text/javascript">
   var piechart_title = <?=json_encode($piechart_title)?>; 
   var row_count = <?=json_encode($row_count)?>;
-  var data_array = <?=json_encode($piechart_data)?>; 
+  var data_array = <?=json_encode($data_points)?>; 
+  var element_count = <?=json_encode($element_count)?>; 
   window.onload = function () {
     for (var i = 1; i <= row_count; i++) {
-    var chartContainer = "chartContainer" + i;
-    var chart_canvas = "chart" + i;
-    var chart_canvas = new CanvasJS.Chart(chartContainer, {
-      title:{
-        text: piechart_title[i]             
-      },
-      data: [//array of dataSeries              
-        { //dataSeries object
+      for (var k = 0; k < element_count-1 ; k++) { 
+        var chartContainer = "chartContainer" + i;
+        var chart_canvas = "chart" + i;
+        var chart_canvas = new CanvasJS.Chart(chartContainer, {
+          title:{
+            text: piechart_title[i]             
+          },
+          data: [//array of dataSeries              
+            { //dataSeries object
 
-         /*** Change type "column" to "bar", "area", "line" or "pie"***/
-         type: "pie",
-         dataPoints: [
-         { label: data_array[1][0][0], y: data_array[1][0][1] },
-         { label: data_array[1][1][0], y: data_array[1][1][1] },
-         { label: data_array[1][2][0], y: data_array[1][2][1] },       
-         { label: data_array[1][3][0], y: data_array[1][3][1] }                            
-         ]
-       }
-       ]
-     });
-       chart_canvas.render();
+             /*** Change type "column" to "bar", "area", "line" or "pie"***/
+             type: "pie",
+             dataPoints: data_array
+           }
+           ]
+        });
+         chart_canvas.render();
+       };
     };
  }
 </script>
@@ -104,7 +108,7 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
 
 
 
-<!-- OLD
+<!-- OLD (GOOGLE CHARTS)
   <script type="text/javascript">    
     var row_count = <?=json_encode($row_count)?>;  
 
@@ -178,7 +182,7 @@ Array ( [2] => Array ( [0] => Array ( [0] => title1 [1] => title2 )
 </head>
 
 <body>
-<div class="header">HEADER</div>
+<div class="header"></div>
 <div class="container">
 <div class="mainbody">
 
